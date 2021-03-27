@@ -1,1 +1,61 @@
-// TODO
+.container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    margin-top: 82px;
+}
+    
+
+
+
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    
+
+    section {
+        & + section{
+            margin-top: 3rem;
+        }
+
+        h2 {
+            font-weight: bold;
+            font-size: 1.75rem;
+        }
+
+        p {
+            margin-top: 0.5rem;
+            font-size: 1.125rem;
+            color: var(--body)
+        }
+
+        footer {
+            margin-top: 1.5rem;
+            color: var(--body);
+            font-weight: 400;
+            font-size: 0.8rem;
+
+            display: flex;
+            align-items: center;
+
+            span:nth-child(2){
+                margin-left: 1.6rem;
+            }
+        }
+    }
+
+    button {
+        background: none;
+        color: var(--highlight);
+        border: none;
+        width: 175px;
+        height: 22px;
+        margin-top: 3.5rem;
+        margin-bottom: 5rem;
+        text-align: left;
+    }
+
+}
+    

@@ -1,1 +1,60 @@
-// TODO
+.content {
+    max-width: 720px;
+    padding: 0 2rem;
+    margin: 5rem auto;
+    text-align: justify;
+
+    
+
+    strong{
+        color: var(--highlight)
+    }
+
+    h1 {
+        text-align: left;
+        font-weight: bold;
+        font-size: 3rem;
+    }
+
+    time {
+        display: inline-block;
+        margin-top: 1.5rem;
+    }
+        
+    h2 {
+        margin-top: 4rem;
+        margin-bottom: 2rem;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+
+
+    
+    div {
+        font-size: 1.125rem;
+        font-weight: 400;
+        color: var(--body);
+        line-height: 1.5rem;
+
+        & + h2{
+            line-height: 3rem;
+        }
+    }
+
+
+
+}
+
+.headerContainer{
+    max-width: 1120px;
+    margin: 2.5rem auto;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.ImageContent{
+    width: 100%;
+}
+    
+
