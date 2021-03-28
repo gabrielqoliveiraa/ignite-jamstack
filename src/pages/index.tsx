@@ -1,19 +1,18 @@
 import { GetStaticProps } from 'next';
-import { useState } from 'react'
+import { useState } from 'react';
 import Prismic from '@prismicio/client';
 import { RichText } from 'prismic-dom';
-import Link from 'next/link'
-
+import Link from 'next/link';
 
 import { FiUser } from 'react-icons/fi';
 import { FiCalendar } from 'react-icons/fi';
+import { format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
 import { getPrismicClient } from '../services/prismic';
 import Header from '../components/Header';
-import { format } from 'date-fns';
-import ptBR from 'date-fns/locale/pt-BR';
 
 interface Post {
   uid?: string;
@@ -35,35 +34,65 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps): JSX.Element {
-  const [page, setPage] = useState<Post[]>([])
-  
+  const formatedPosts = postsPagination.results.map(post => {
+    return {
+      ...post,
+      first_publication_date: format(
+        new Date(post.first_publication_date),
+        'dd MMM yyyy',
+        { locale: ptBR }
+      ),
+    };
+  });
 
-  async function submitAPI(){
-    const prismic = await fetch(postsPagination.next_page);
-    const json = await prismic.json()
+  const [posts, setPosts] = useState<Post[]>(formatedPosts);
+  const [nextPage, setNextPage] = useState(postsPagination.next_page);
+  const [currentPage, setCurrentPage] = useState(1);
 
-    await setPage([json.results])
-    console.log(json)
+  async function handleNextPage(): Promise<void> {
+    if (currentPage !== 1 && nextPage === null) {
+      return;
+    }
 
+    const postResults = await fetch(`${nextPage}`).then(response =>
+      response.json()
+    );
+    setNextPage(postResults.nextPage);
+    setCurrentPage(postResults.page);
+
+    const newPosts = postResults.results.map(post => {
+      return {
+        uid: post.uid,
+        first_publication_date: format(
+          new Date(post.first_publication_date),
+          'dd MMM yyyy',
+          { locale: ptBR }
+        ),
+        data: {
+          title: RichText.asText(post.data.title),
+          subtitle: RichText.asText(post.data.subtitle),
+          author: RichText.asText(post.data.author),
+        },
+      };
+    });
+    setPosts([...posts, newPosts]);
   }
-    
 
-  
   return (
     <div className={styles.container}>
       <div className={styles.content}>
         <Header />
 
-        {postsPagination.results.map((post: Post) => (
-          <section key={post.data.title}>
+        {posts.map(post => (
+          <section key={post.uid}>
             <Link href={`/post/${post.uid}`}>
               <h2>{post.data.title}</h2>
             </Link>
-            
+
             <p>{post.data.subtitle}</p>
             <footer>
               <span>
-                <FiCalendar /> {postsPagination.results.map(date => date.first_publication_date)}
+                <FiCalendar /> {post.first_publication_date}
               </span>
               <span>
                 <FiUser /> {post.data.author}
@@ -72,10 +101,10 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
           </section>
         ))}
 
-        
-
         {postsPagination.next_page ? (
-          <button onClick={submitAPI} type="button">Carregar mais Posts</button>
+          <button onClick={handleNextPage} type="button">
+            Carregar mais Posts
+          </button>
         ) : (
           ''
         )}
@@ -96,11 +125,10 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const nextPage = postsResponse.next_page;
 
-  console.log(nextPage)
   const posts = postsResponse.results.map(post => {
     return {
       uid: post.uid,
-      first_publication_date: format(new Date(post.first_publication_date), "dd MMMM yyyy", {locale: ptBR}),
+      first_publication_date: post.first_publication_date,
       data: {
         title: RichText.asText(post.data.title),
         subtitle: RichText.asText(post.data.subtitle),
@@ -116,6 +144,5 @@ export const getStaticProps: GetStaticProps = async () => {
         results: posts,
       },
     },
-    revalidate: 60 * 60,
   };
 };

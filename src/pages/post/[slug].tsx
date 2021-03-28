@@ -3,7 +3,6 @@ import { RichText } from 'prismic-dom';
 import { format, formatRelative } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
-
 import { FiUser } from 'react-icons/fi';
 import { FiClock } from 'react-icons/fi';
 import { FiCalendar } from 'react-icons/fi';
@@ -85,14 +84,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
   });
 
-  let date = new Date(response.first_publication_date)
-  let today = new Date()
+  const date = new Date(response.first_publication_date);
+  const today = new Date();
 
-  let dateClock = formatRelative(date, today, {locale: ptBR})
+  const dateClock = formatRelative(date, today, { locale: ptBR });
 
   const post = {
-
-    first_publication_date: format(date, "dd MMMM yyyy", {locale: ptBR}),
+    first_publication_date: format(date, 'dd MMMM yyyy', { locale: ptBR }),
 
     data: {
       title: RichText.asText(response.data.title),
