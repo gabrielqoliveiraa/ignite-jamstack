@@ -1,7 +1,8 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { RichText } from 'prismic-dom';
-import { format } from 'date-fns';
+import { format, formatRelative } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+
 
 import { FiUser } from 'react-icons/fi';
 import { FiClock } from 'react-icons/fi';
@@ -50,7 +51,7 @@ export default function Post({ post }: PostProps): JSX.Element {
             {' '}
             <FiCalendar /> {post.first_publication_date}
             <FiUser /> {post.data.author}
-            <FiClock /> 
+            <FiClock /> 4 min
           </time>
 
           {post.data.content.map(content => (
@@ -84,14 +85,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
   });
 
-  // console.log(test);
+  let date = new Date(response.first_publication_date)
+  let today = new Date()
+
+  let dateClock = formatRelative(date, today, {locale: ptBR})
 
   const post = {
-    first_publication_date: format(
-      new Date(),
-      response.first_publication_date,
-      { locale: ptBR }
-    ),
+
+    first_publication_date: format(date, "dd MMMM yyyy", {locale: ptBR}),
+
     data: {
       title: RichText.asText(response.data.title),
       banner: { url: response.data.banner.url },

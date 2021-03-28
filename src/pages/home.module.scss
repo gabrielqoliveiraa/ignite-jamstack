@@ -1,4 +1,7 @@
 .container {
+    header:nth-child(1){
+        margin-bottom: 4rem;
+    }
     max-width: 720px;
     margin: 0 auto;
     padding: 0 2rem;
@@ -23,6 +26,7 @@
         h2 {
             font-weight: bold;
             font-size: 1.75rem;
+            cursor: pointer;
         }
 
         p {

@@ -17,6 +17,11 @@
     }
 
     time {
+        svg {
+            & + svg {
+                margin-left: 3.25rem;
+            }
+        }
         display: inline-block;
         margin-top: 1.5rem;
     }
