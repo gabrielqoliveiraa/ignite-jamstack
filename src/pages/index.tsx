@@ -7,6 +7,7 @@ import { FiUser } from 'react-icons/fi';
 import { FiCalendar } from 'react-icons/fi';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+import { RichText } from 'prismic-dom';
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
@@ -69,9 +70,9 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
             { locale: ptBR }
           ),
           data: {
-            title: post.data.title,
-            subtitle: post.data.subtitle,
-            author: post.data.author,
+            title: RichText.asText(post.data.title),
+            subtitle: RichText.asText(post.data.subtitle),
+            author: RichText.asText(post.data.author),
           },
         };
       }
@@ -130,9 +131,9 @@ export const getStaticProps: GetStaticProps = async () => {
       uid: post.uid,
       first_publication_date: post.first_publication_date,
       data: {
-        title: post.data.title,
-        subtitle: post.data.subtitle,
-        author: post.data.author,
+        title: RichText.asText(post.data.title),
+        subtitle: RichText.asText(post.data.subtitle),
+        author: RichText.asText(post.data.author),
       },
     };
   });

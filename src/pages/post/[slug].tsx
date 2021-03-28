@@ -1,6 +1,6 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-return-assign */
-/* eslint-disable react/no-danger */
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { format } from 'date-fns';
 import { RichText } from 'prismic-dom';
@@ -62,9 +62,11 @@ export default function Post({ post }: PostProps): ReactElement {
   }
   return (
     <>
-      <Header />
+      <div className={styles.headerContainer}>
+        <Header />
+      </div>
       <img src={post.data.banner.url} alt="imagem" className={styles.banner} />
-      <main className={commonStyles.container}>
+      <main className={styles.container}>
         <div className={styles.post}>
           <div className={styles.postTop}>
             <h1>{post.data.title}</h1>
@@ -119,7 +121,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: true,
+    fallback: 'blocking',
   };
 };
 
@@ -132,9 +134,9 @@ export const getStaticProps: GetStaticProps = async context => {
     uid: response.uid,
     first_publication_date: response.first_publication_date,
     data: {
-      title: response.data.title,
-      subtitle: response.data.subtitle,
-      author: response.data.author,
+      title: RichText.asText(response.data.title),
+      subtitle: RichText.asText(response.data.subtitle),
+      author: RichText.asText(response.data.author),
       banner: {
         url: response.data.banner.url,
       },
