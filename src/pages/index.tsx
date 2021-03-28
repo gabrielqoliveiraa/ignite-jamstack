@@ -1,7 +1,6 @@
 import { GetStaticProps } from 'next';
 import { useState } from 'react';
 import Prismic from '@prismicio/client';
-import { RichText } from 'prismic-dom';
 import Link from 'next/link';
 
 import { FiUser } from 'react-icons/fi';
@@ -60,22 +59,25 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
     setNextPage(postResults.nextPage);
     setCurrentPage(postResults.page);
 
-    const newPosts = postResults.results.map(post => {
-      return {
-        uid: post.uid,
-        first_publication_date: format(
-          new Date(post.first_publication_date),
-          'dd MMM yyyy',
-          { locale: ptBR }
-        ),
-        data: {
-          title: RichText.asText(post.data.title),
-          subtitle: RichText.asText(post.data.subtitle),
-          author: RichText.asText(post.data.author),
-        },
-      };
-    });
-    setPosts([...posts, newPosts]);
+    const newPosts = postResults.results.map(
+      (post): Post => {
+        return {
+          uid: post.uid,
+          first_publication_date: format(
+            new Date(post.first_publication_date),
+            'dd MMM yyyy',
+            { locale: ptBR }
+          ),
+          data: {
+            title: post.data.title,
+            subtitle: post.data.subtitle,
+            author: post.data.author,
+          },
+        };
+      }
+    );
+
+    setPosts([...posts, ...newPosts]);
   }
 
   return (
@@ -101,12 +103,10 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
           </section>
         ))}
 
-        {postsPagination.next_page ? (
-          <button onClick={handleNextPage} type="button">
-            Carregar mais Posts
+        {nextPage && (
+          <button type="button" onClick={handleNextPage}>
+            Carregar mais posts
           </button>
-        ) : (
-          ''
         )}
       </div>
     </div>
@@ -130,9 +130,9 @@ export const getStaticProps: GetStaticProps = async () => {
       uid: post.uid,
       first_publication_date: post.first_publication_date,
       data: {
-        title: RichText.asText(post.data.title),
-        subtitle: RichText.asText(post.data.subtitle),
-        author: RichText.asText(post.data.author),
+        title: post.data.title,
+        subtitle: post.data.subtitle,
+        author: post.data.author,
       },
     };
   });
