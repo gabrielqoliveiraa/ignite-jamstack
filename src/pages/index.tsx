@@ -8,7 +8,6 @@ import { FiCalendar } from 'react-icons/fi';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { RichText } from 'prismic-dom';
-import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
 import { getPrismicClient } from '../services/prismic';
@@ -57,7 +56,7 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
     const postResults = await fetch(`${nextPage}`).then(response =>
       response.json()
     );
-    setNextPage(postResults.nextPage);
+    setNextPage(postResults.next_page);
     setCurrentPage(postResults.page);
 
     const newPosts = postResults.results.map(
@@ -125,7 +124,6 @@ export const getStaticProps: GetStaticProps = async () => {
   );
 
   const nextPage = postsResponse.next_page;
-
   const posts = postsResponse.results.map(post => {
     return {
       uid: post.uid,

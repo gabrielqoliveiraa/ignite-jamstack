@@ -51,6 +51,19 @@
   }
   
   .postTop{
+
+    p {
+      color: var(--info);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 0.875rem;
+      margin-right: auto;
+      margin-bottom: auto;
+    }
+      
+
+
+
     > h1 {
       font-size:3rem;
       color:var(--heading);
@@ -79,3 +92,31 @@
     }
   
   }
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+  
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+
+  a{
+    color: var(--highlight);
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .prevPost{
+    width: 240px;
+    text-align: right;
+    a {
+      display: inline-block;
+      
+    }
+  }
+}
